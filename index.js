@@ -25,8 +25,20 @@ const persons =
     }
 ]
 
+const infoPage = () => (
+    `<!DOCTYPE html>
+    <div>
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${Date()}</p>
+    </div>`
+)
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
+})
+
+app.get('/info', (request, response) => {
+    response.send(infoPage())
 })
 
 const PORT = 3001
