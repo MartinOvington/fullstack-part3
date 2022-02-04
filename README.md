@@ -1,5 +1,5 @@
 # Fullstack Open Part3
 
-Phonebook backend server.
+Phonebook single page app:
 
 https://agile-temple-23952.herokuapp.com/api/persons
