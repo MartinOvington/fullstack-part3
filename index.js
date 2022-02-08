@@ -56,16 +56,11 @@ app.get('/api/persons', (request, response) => {
     })
   })
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-})
+  app.get('/api/persons/:id', (request, response) => {
+    Person.findById(request.params.id).then(person => {
+      response.json(person)
+    })
+  })
 
 app.get('/info', (request, response) => {
     response.send(infoPage())
@@ -95,14 +90,15 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    const person = {
+    const person = new Person ({
         id: Math.floor(Math.random() * 100000),
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-    response.json(person)
+    person.save().then(savedNote => {
+        response.json(savedNote)
+    })
 })
 
 const PORT = process.env.PORT
