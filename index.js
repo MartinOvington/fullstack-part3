@@ -96,9 +96,16 @@ app.post('/api/persons', (request, response, next) => {
         number: body.number
     })
 
-    person.save()
-        .then(savedNote => {
-            response.json(savedNote)
+    Person.find({ name: person.name })
+        .then(result =>{
+            if (result.length > 0) {
+                throw { name: "DuplicateError", message:"Tried to POST duplicate person"}
+            }
+            person.save()
+            .then(savedNote => {
+                response.json(savedNote)
+            })
+            .catch(error => next(error))
         })
         .catch(error => next(error))
 })
@@ -125,6 +132,8 @@ const errorHandler = (error, request, response, next) => {
       return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {    
         return response.status(400).json({ error: error.message })  
+    } else if (error.name === 'DuplicateError') {
+        return response.status(400).json({ error: error.message })
     }
   
     next(error)
